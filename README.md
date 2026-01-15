@@ -5,4 +5,4 @@ Trainer: [Daniel Appenmaier](https://github.com/appenmaier)
 
 [Trainings-Repository](https://github.com/appenmaier/abap_2601)
 
-[Stylized SAP Logo](images/icons8-sap-64.png)
+![Stylized SAP Logo](images/icons8-sap-64.png)
