@@ -21,16 +21,19 @@ CLASS zcl_06_main_vehicles IMPLEMENTATION.
     " Instanziierungen
     out->write( zcl_06_vehicle=>number_of_created_vehicles ).
 
-    vehicle = NEW #( make  = 'Porsche'
-                     model = '911' ).
+    vehicle = NEW zcl_06_car( make  = 'Porsche'
+                              model = '911'
+                              seats = 2 ).                   " Upcast
     APPEND vehicle TO vehicles.                              " Speicherung der Speicheradresse in Tabelle
 
-    vehicle = NEW #( make  = 'MAN'
-                     model = 'TGX' ).
+    vehicle = NEW zcl_06_truck( make          = 'MAN'
+                                model         = 'TGX'
+                                cargo_in_tons = 40 ).        " Upcast
     APPEND vehicle TO vehicles.
 
-    vehicle = NEW #( make  = 'Skoda'
-                     model = 'Superb Combi' ).
+    vehicle = NEW zcl_06_car( make  = 'Skoda'
+                              model = 'Superb Combi'
+                              seats = 5 ).                   " Upcast
     APPEND vehicle TO vehicles.
 
     out->write( zcl_06_vehicle=>number_of_created_vehicles ).
@@ -44,7 +47,7 @@ CLASS zcl_06_main_vehicles IMPLEMENTATION.
         CATCH zcx_06_value_too_high INTO DATA(x).
           out->write( x->get_text( ) ).
       ENDTRY.
-      out->write( |{ vehicle->make } { vehicle->model }, { vehicle->speed_in_kmh }km/h| ).
+      out->write( vehicle->to_string(  ) ).                  " (Dynamische) Polymorphie -> Zur Laufzeit wird entscheiden, welche Implementierung aufgerufen werden
     ENDLOOP.
   ENDMETHOD.
 ENDCLASS.

@@ -1,24 +1,18 @@
 CLASS zcl_06_vehicle DEFINITION
   PUBLIC
-  FINAL
-  CREATE PUBLIC .
+  CREATE PUBLIC.
 
   PUBLIC SECTION.
     METHODS constructor IMPORTING make  TYPE string
                                   model TYPE string.
 
     METHODS accelerate IMPORTING !value TYPE i
-                       RAISING
-                         zcx_06_value_too_high.
-    METHODS brake      IMPORTING !value TYPE i
-                       RAISING
-                         zcx_06_value_too_high.
+                       RAISING   zcx_06_value_too_high.
 
-*    METHODS get_make         RETURNING VALUE(make)         TYPE string.
-*    METHODS get_model        RETURNING VALUE(model)        TYPE string.
-*    METHODS set_model        IMPORTING model               TYPE string.
-*    METHODS get_speed_in_kmh RETURNING VALUE(speed_in_kmh) TYPE i.
-*    METHODS set_speed_in_kmh IMPORTING speed_in_kmh        TYPE i.
+    METHODS brake IMPORTING !value TYPE i
+                  RAISING   zcx_06_value_too_high.
+
+    METHODS to_string RETURNING VALUE(string) TYPE string.
 
     DATA make         TYPE string READ-ONLY.
     DATA model        TYPE string READ-ONLY.
@@ -64,6 +58,10 @@ CLASS zcl_06_vehicle IMPLEMENTATION.
     ENDIF.
 
     speed_in_kmh -= value.
+  ENDMETHOD.
+
+  METHOD to_string.
+    string = |{ make } { model } ({ speed_in_kmh }km/h|.
   ENDMETHOD.
 
 ENDCLASS.
