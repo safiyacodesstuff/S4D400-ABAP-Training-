@@ -17,6 +17,7 @@ CLASS zcl_06_main_vehicles IMPLEMENTATION.
     " Deklarationen
     DATA vehicle  TYPE REF TO zcl_06_vehicle.
     DATA vehicles TYPE TABLE OF REF TO zcl_06_vehicle.       " Einspaltige Tabelle
+    DATA truck    TYPE REF TO zcl_06_truck.
 
     " Instanziierungen
     out->write( zcl_06_vehicle=>number_of_created_vehicles ).
@@ -47,7 +48,16 @@ CLASS zcl_06_main_vehicles IMPLEMENTATION.
         CATCH zcx_06_value_too_high INTO DATA(x).
           out->write( x->get_text( ) ).
       ENDTRY.
-      out->write( vehicle->to_string(  ) ).                  " (Dynamische) Polymorphie -> Zur Laufzeit wird entscheiden, welche Implementierung aufgerufen werden
+
+      IF vehicle IS INSTANCE OF zcl_06_truck.
+        truck = CAST #( vehicle ).                             " Downcast
+        truck->transform( ).
+        out->write( | { COND #( WHEN truck->is_transformed = 'x'
+                        THEN 'Der LKW hat sich in einen Autobot transformiert.       '
+                        ELSE 'Der Autobot hat sich wieder in einen LKW transformiert.' ) } | ).
+      ENDIF.
+      out->write( vehicle->to_string( ) ).                  " (Dynamische) Polymorphie -> Zur Laufzeit wird entscheiden, welche Implementierung aufgerufen werden
+
     ENDLOOP.
   ENDMETHOD.
 ENDCLASS.
