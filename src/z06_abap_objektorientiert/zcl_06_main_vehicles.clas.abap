@@ -19,6 +19,10 @@ CLASS zcl_06_main_vehicles IMPLEMENTATION.
     DATA vehicles TYPE TABLE OF REF TO zcl_06_vehicle.       " Einspaltige Tabelle
     DATA truck    TYPE REF TO zcl_06_truck.
 
+    DATA rental   TYPE REF TO zcl_06_rental.
+    DATA carrier  TYPE REF TO zcl_06_carrier.
+    DATA partners TYPE TABLE OF REF TO zif_06_partner.
+
     " Instanziierungen
     out->write( zcl_06_vehicle=>number_of_created_vehicles ).
 
@@ -39,6 +43,12 @@ CLASS zcl_06_main_vehicles IMPLEMENTATION.
 
     out->write( zcl_06_vehicle=>number_of_created_vehicles ).
 
+    rental = NEW #( ).
+    carrier = NEW #( 'Lufthansa' ).
+
+    APPEND rental TO partners. " Upcast
+    APPEND carrier TO partners. " Upcast
+
     " Ausgabe
     LOOP AT vehicles INTO vehicle.
       TRY.
@@ -53,10 +63,19 @@ CLASS zcl_06_main_vehicles IMPLEMENTATION.
         truck = CAST #( vehicle ).                             " Downcast
         truck->transform( ).
         out->write( | { COND #( WHEN truck->is_transformed = 'x'
-                        THEN 'Der LKW hat sich in einen Autobot transformiert.       '
-                        ELSE 'Der Autobot hat sich wieder in einen LKW transformiert.' ) } | ).
+                                THEN 'Der LKW hat sich in einen Autobot transformiert.       '
+                                ELSE 'Der Autobot hat sich wieder in einen LKW transformiert.' ) } | ).
       ENDIF.
-      out->write( vehicle->to_string( ) ).                  " (Dynamische) Polymorphie -> Zur Laufzeit wird entscheiden, welche Implementierung aufgerufen werden
+      out->write( vehicle->to_string( ) ).                     " (Dynamische) Polymorphie -> Zur Laufzeit wird entscheiden, welche Implementierung aufgerufen werden
+
+      LOOP AT partners INTO DATA(partner).
+        out->write( partner->to_string( ) ).
+
+        IF partner IS INSTANCE OF zcl_06_carrier.
+          carrier = CAST #( partner ).                         " Downcast
+          out->write( carrier->get_biggest_cargo_plane( ) ).
+        ENDIF.
+      ENDLOOP.
 
     ENDLOOP.
   ENDMETHOD.

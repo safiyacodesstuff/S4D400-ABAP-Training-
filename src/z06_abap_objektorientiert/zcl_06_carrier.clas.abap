@@ -3,6 +3,7 @@ CLASS zcl_06_carrier DEFINITION
   CREATE PUBLIC .
 
   PUBLIC SECTION.
+    INTERFACES zif_06_partner.
 
     DATA name TYPE string READ-ONLY.
     DATA airplanes TYPE Z06_airplanes READ-ONLY.
@@ -45,6 +46,10 @@ CLASS zcl_06_carrier IMPLEMENTATION.
         max_cargo_in_tons = biggest_cargo_plane->get_total_weight_in_tons(  ).
       ENDIF.
     ENDLOOP.
+  ENDMETHOD.
+
+  METHOD zif_06_partner~to_string.
+    string = 'Ich bin die Fluggesellschaft'.
   ENDMETHOD.
 
 ENDCLASS.

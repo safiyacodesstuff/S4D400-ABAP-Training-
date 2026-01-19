@@ -1,16 +1,16 @@
 CLASS zcl_06_vehicle DEFINITION
-  PUBLIC
+  PUBLIC ABSTRACT
   CREATE PUBLIC.
 
   PUBLIC SECTION.
     METHODS constructor IMPORTING make  TYPE string
                                   model TYPE string.
 
-    METHODS accelerate IMPORTING !value TYPE i
-                       RAISING   zcx_06_value_too_high.
+    METHODS accelerate FINAL IMPORTING !value TYPE i
+                             RAISING   zcx_06_value_too_high.
 
-    METHODS brake IMPORTING !value TYPE i
-                  RAISING   zcx_06_value_too_high.
+    METHODS brake FINAL IMPORTING !value TYPE i
+                        RAISING   zcx_06_value_too_high.
 
     METHODS to_string RETURNING VALUE(string) TYPE string.
 
